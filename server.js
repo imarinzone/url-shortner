@@ -6,7 +6,7 @@ var app = express();
 var server = http.createServer(app);
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
-
+app.use(express.json({ extended: true }))
 app.get('/all', api.getallURL)
 
 app.get('/shortUrls/:url', api.getURL)

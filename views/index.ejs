@@ -6,23 +6,30 @@
       <button class="btn btn-success" type="submit" onclick="showDiv()">Shrink</button>
     </form>
     
-    <div id="shrinkUrl" a {
-      display: hidden
-    }>
-      <a href="https://www.google.com">https://www.google.com</a>
+    <div id="shrinkUrl" style="display: none">
+      <a id= "shortUrl" href="" target="_blank"></a>
     </div>
 
     <script>
       function showDiv()
       {
         var id = document.getElementById('longUrl')
-        console.log(id.value)
+        var obj ={
+          'url':id.value
+        }
+        console.log(obj)
         fetch(`http://localhost:3000/addUrl/`, {
-          method: 'POST'
-          body: id.value
-        }).then(data=>{
-          console.log(data.url)
-          //document.getElementById('shirinkUrl').style.visibility = 'visible';
+          method: 'POST',
+          body: JSON.stringify(obj),
+          headers: {
+            'Content-type': "application/json"
+          }
+        }).then(res=>res.json())
+        .then(data=>{
+          console.log(data)
+          document.getElementById('shrinkUrl').style.display = 'block';
+          document.getElementById('shortUrl').innerHTML = `http://localhost:3000/shortUrls/${data.url}`
+          document.getElementById('shortUrl').href = `http://localhost:3000/shortUrls/${data.url}`
         }).catch(e=>{
           console.log(e);
         });

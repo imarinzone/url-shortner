@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <h1>URL Shrinker</h1>
+      <label for="longUrl">Url</label>
+      <input required placeholder="Url" type="url" name="longUrl" id="longUrl">
+      <button class="btn btn-success" type="submit" onclick="showDiv()">Shrink</button>
+    </form>
+    
+    <div id="shrinkUrl" a {
+      display: hidden
+    }>
+      <a href="https://www.google.com">https://www.google.com</a>
+    </div>
+
+    <script>
+      function showDiv()
+      {
+        var id = document.getElementById('longUrl')
+        console.log(id.value)
+        fetch(`http://localhost:3000/addUrl/`, {
+          method: 'POST'
+          body: id.value
+        }).then(data=>{
+          console.log(data.url)
+          //document.getElementById('shirinkUrl').style.visibility = 'visible';
+        }).catch(e=>{
+          console.log(e);
+        });
+      }
+    </script>
+</html>

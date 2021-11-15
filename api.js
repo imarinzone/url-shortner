@@ -1,18 +1,22 @@
 const { response } = require("express")
 
 pool = require("./connection")
-
+// API to redirect the page
 const getURL = (request, response) => {
     const entryUrl = request.params['url']
     pool.query(`SELECT * FROM url_db where short_url='${entryUrl}'`, (error, results) => {
         if (error) {
             throw error
         }
-        console.log(results)
-        response.redirect(results.rows[0].long_url)
+        if (results.rows.length){
+            response.status(302).redirect(results.rows[0].long_url)
+        }
+        else{
+            response.status(404).send("NOT A VALID SHRINK URL!")
+        }
     })
     }
-
+// API to get all the URLs in the DB
 const getallURL = (request, response) => {
     pool.query('SELECT * FROM url_db', (error, results) => {
         if (error) {
@@ -21,7 +25,7 @@ const getallURL = (request, response) => {
         response.status(200).send(results.rows)
     })
     }
-
+// API to add a new URL in the DB
 const addURL = (request, response) => {
     entryUrl = request.body.url
     pool.query(`SELECT * FROM url_db where long_url='${entryUrl}'`, (error, results) => {
